@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
-
 from unittest import TestCase
 
 from url_tools.helper import UrlHelper

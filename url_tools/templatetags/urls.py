@@ -1,6 +1,7 @@
-
-
-import urllib.request, urllib.parse, urllib.error
+try:
+    from urllib.parse import quote, quote_plus
+except ImportError:
+    from urllib import quote, quote_plus
 
 from django import template
 
@@ -55,9 +56,9 @@ def toggle_params(url, **kwargs):
 
 @register.filter(name='quote')
 def quote_param(value, safe='/'):
-    return urllib.parse.quote(value, safe)
+    return quote(value, safe)
 
 
 @register.filter(name='quote_plus')
 def quote_param_plus(value, safe='/'):
-    return urllib.parse.quote_plus(value, safe)
+    return quote_plus(value, safe)

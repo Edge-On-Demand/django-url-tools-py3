@@ -1,8 +1,9 @@
-
-
-import urllib.request, urllib.parse, urllib.error
-import urllib.parse
 import hashlib
+try:
+    from urllib.parse import parse_qsl, urlparse, quote_plus
+except ImportError:
+    from urllib import quote_plus
+    from urlparse import parse_qsl, urlparse
 
 try:
     from django.http.request import QueryDict
@@ -23,11 +24,10 @@ def unique_list(ls):
 
 
 class OrderedQueryDict(QueryDict):
-
     def __init__(self, query_string=None, mutable=False, encoding=None, order=None):
-        super().__init__(query_string, mutable, encoding)
+        super(QueryDict, self).__init__(query_string, mutable, encoding)
         if not order:
-            order = [key for key, _ in urllib.parse.parse_qsl(query_string)]
+            order = [key for key, _ in parse_qsl(query_string)]
         self.order = order
 
     def _ordered_keys(self):
@@ -56,7 +56,7 @@ class UrlHelper(object):
             full_path = full_path.get_full_path()
 
         # parse the path
-        r = urllib.parse.urlparse(full_path)
+        r = urlparse(full_path)
         self.path = r.path
         self.fragment = r.fragment
         self.query_dict = OrderedQueryDict(r.query, mutable=True)
@@ -90,7 +90,7 @@ class UrlHelper(object):
         )
 
     def get_full_quoted_path(self, **kwargs):
-        return urllib.parse.quote_plus(self.get_full_path(**kwargs), safe='/')
+        return quote_plus(self.get_full_path(**kwargs), safe='/')
 
     def overload_params(self, **kwargs):
         for key, val in kwargs.items():

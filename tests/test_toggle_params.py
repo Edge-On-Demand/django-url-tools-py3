@@ -1,5 +1,3 @@
-
-
 from unittest import TestCase
 
 from url_tools.templatetags.urls import toggle_params
